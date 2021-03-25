@@ -25,10 +25,6 @@ function checksExistsUserAccount(request, response, next) {  // Feito
   return next();
 }  // Concluido
 
-app.get("/",(request, response)=>{  // Minha Rota
-  return response.json(users);
-});
-
 app.post('/users', (request, response) => {
   // Complete aqui
   const {name, username} = request.body;  // Pegando informações enviadas pelo cliente
@@ -38,7 +34,7 @@ app.post('/users', (request, response) => {
   );  // Verifica se o usuário existem dentro do array
 
   if (userAlreadExist){  // Envia mensagem de erro caso o usuário já exista
-    return response.status(400).json({"error": "Username alread exist!"})
+    return response.status(400).json({"error": "Username alread exist"})
   }
 
     const user = {  // Objeto com informações do novo usuário
@@ -73,7 +69,7 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 
   user.todos.push(todo);
 
-  return response.status(201).send(user);
+  return response.status(201).send(todo);
 
 });  // Concluido
 
@@ -91,7 +87,7 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
   todo.title = title;
   todo.deadline = new Date(deadline)
 
-  return response.status(200).send(todo);
+  return response.status(200).json(todo);
 });  // Concluido
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
@@ -106,7 +102,7 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
 
   todo.done = true;
 
-  return response.status(200).send(todo);
+  return response.status(200).json(todo);
 
 });  // Concluido
 
@@ -116,7 +112,7 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
 
   const todoIndex = user.todos.findIndex(todo => todo.id === id);
 
-  if(!todoIndex === -1){
+  if(todoIndex == -1){
     return response.status(404).json({"error":"Todo not found"})
   }
 
